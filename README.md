@@ -13,8 +13,12 @@ oc label configmap che-code-sshd-clg app.kubernetes.io/part-of=che.eclipse.org a
 
 For workspaces running in OCP 4.20+ with nested containers enabled, use the following image as the base image for the workspace image:
 
+```
 quay.io/cgruver0/che/sshd-workspace-base:userns
+```
 
 For workspace without nested containers enabled use this image:
 
+```
 quay.io/cgruver0/che/sshd-workspace-base:nouserns
+```
