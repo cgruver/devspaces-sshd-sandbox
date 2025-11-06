@@ -1,0 +1,60 @@
+FROM registry.access.redhat.com/ubi9:9.6
+
+ARG USER_HOME_DIR="/home/user"
+ARG WORK_DIR="/projects"
+ARG INSTALL_PACKAGES="procps-ng openssl libbrotli git tar gzip zip xz unzip which shadow-utils bash zsh vi wget jq podman buildah skopeo ca-certificates python python-pip python-devel fuse-overlayfs util-linux vim-minimal vim-enhanced helm kustomize libsecret openssh-server"
+ARG NODE_VERSION="v18.20.8"
+
+ENV HOME=${USER_HOME_DIR}
+ENV BUILDAH_ISOLATION=chroot
+ENV PATH=${PATH}:/usr/local/node/bin
+
+COPY --chown=0:0 entrypoint.sh /
+
+RUN set -e ; \
+  dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm ; \
+  dnf install -y ${INSTALL_PACKAGES} ; \
+  dnf update -y ; \
+  dnf clean all ; \
+  mkdir -p /usr/local/bin ; \
+  mkdir -p ${WORK_DIR} ; \
+  chmod +x /entrypoint.sh ; \
+  #
+  # Install NodeJS
+  #
+  TEMP_DIR="$(mktemp -d)" ; \
+  curl -fsSL -o ${TEMP_DIR}/node.tz https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.xz ; \
+  tar -x --no-auto-compress -f ${TEMP_DIR}/node.tz -C ${TEMP_DIR} ; \
+  mv ${TEMP_DIR}/node-${NODE_VERSION}-linux-x64 /usr/local/node ; \
+  rm -rf "${TEMP_DIR}" ; \
+  #
+  # Setup for root-less podman
+  #
+  mkdir -p ${USER_HOME_DIR} ; \
+  touch /etc/subgid /etc/subuid ; \
+  chmod -R g=u /etc/passwd /etc/group /etc/subuid /etc/subgid /home ; \
+  setcap cap_setuid+ep /usr/bin/newuidmap ; \
+  setcap cap_setgid+ep /usr/bin/newgidmap ; \
+  #
+  # Create Sym Links for OpenShift CLI (Assumed to be retrieved by an init-container)
+  #
+  ln -s /projects/bin/oc /usr/local/bin/oc ; \
+  ln -s /projects/bin/kubectl /usr/local/bin/kubectl ; \
+  #
+  # Set up non-root sshd server
+  #
+  mkdir -p /usr/local/ssh ; \
+  chmod 755 /usr/local/ssh ; \
+  ssh-keygen -q -N "" -t dsa -f /usr/local/ssh/ssh_host_dsa_key ; \
+  ssh-keygen -q -N "" -t rsa -b 4096 -f /usr/local/ssh/ssh_host_rsa_key ; \
+  ssh-keygen -q -N "" -t ecdsa -f /usr/local/ssh/ssh_host_ecdsa_key ; \
+  ssh-keygen -q -N "" -t ed25519 -f /usr/local/ssh/ssh_host_ed25519_key ; \
+  cp /etc/ssh/sshd_config /usr/local/ssh ; \
+  chmod 644 /usr/local/ssh/* ; \
+  sed -i -e 's|#Port 22|Port 2022|' -e 's|#StrictModes yes|StrictModes=no|' -e 's|#PidFile /var/run/sshd.pid|PidFile /tmp/sshd.pid|' -e 's|#LogLevel INFO|LogLevel DEBUG3|' /usr/local/ssh/sshd_config ; \
+  sed -i -e 's|#HostKey /etc/ssh/ssh_host_rsa_key|HostKey /usr/local/ssh/ssh_host_rsa_key|' -e 's|#HostKey /etc/ssh/ssh_host_ecdsa_key|HostKey /usr/local/ssh/ssh_host_ecdsa_key|' -e 's|#HostKey /etc/ssh/ssh_host_ed25519_key|HostKey /usr/local/ssh/ssh_host_ed25519_key|' /usr/local/ssh/sshd_config
+
+USER 1000
+WORKDIR ${WORK_DIR}
+ENTRYPOINT ["/usr/libexec/podman/catatonit","--","/entrypoint.sh"]
+CMD [ "tail", "-f", "/dev/null" ]
