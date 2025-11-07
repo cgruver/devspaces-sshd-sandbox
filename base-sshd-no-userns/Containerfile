@@ -30,7 +30,6 @@ RUN set -e ; \
   #
   # Setup for root-less podman
   #
-  mkdir -p ${USER_HOME_DIR} ; \
   touch /etc/subgid /etc/subuid ; \
   chmod -R g=u /etc/passwd /etc/group /etc/subuid /etc/subgid /home ; \
   setcap cap_setuid+ep /usr/bin/newuidmap ; \

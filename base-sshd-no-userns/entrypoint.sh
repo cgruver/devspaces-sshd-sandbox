@@ -23,12 +23,14 @@ echo "${USER}:${START_ID}:2147483646" > /etc/subgid
 # Setup $PS1 for a consistent and reasonable prompt
 if [ -w "${HOME}" ] && [ ! -f "${HOME}"/.bashrc ]; then
   echo "PS1='[\u@\h \W]\$ '" > "${HOME}"/.bashrc
-  (echo "if [ -f ${PROJECT_SOURCE}/workspace.rc ]"; echo "then"; echo "  . ${PROJECT_SOURCE}/workspace.rc"; echo "fi") > ${HOME}/.bashrc
+  echo "PATH=${PATH}" >> "${HOME}"/.bashrc
+  (echo "if [ -f ${PROJECT_SOURCE}/workspace.rc ]"; echo "then"; echo "  . ${PROJECT_SOURCE}/workspace.rc"; echo "fi") >> ${HOME}/.bashrc
 fi
 
 if [ -w "${HOME}" ] && [ ! -f ${HOME}/.zshrc ]
 then
   (echo "HISTFILE=${HOME}/.zsh_history"; echo "HISTSIZE=1000"; echo "SAVEHIST=1000") > ${HOME}/.zshrc
+  echo "PATH=${PATH}" >> ${HOME}/.zshrc
   (echo "if [ -f ${PROJECT_SOURCE}/workspace.rc ]"; echo "then"; echo "  . ${PROJECT_SOURCE}/workspace.rc"; echo "fi") >> ${HOME}/.zshrc
 fi
 
