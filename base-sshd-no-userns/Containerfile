@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi9:9.6
 
 ARG USER_HOME_DIR="/home/user"
 ARG WORK_DIR="/projects"
-ARG INSTALL_PACKAGES="procps-ng openssl libbrotli git tar gzip zip xz unzip which shadow-utils bash zsh vi wget jq podman buildah skopeo ca-certificates python python-pip python-devel fuse-overlayfs util-linux vim-minimal vim-enhanced helm kustomize libsecret openssh-server"
+ARG INSTALL_PACKAGES="procps-ng openssl libbrotli git tar gzip zip xz unzip which shadow-utils bash zsh vi wget jq podman buildah skopeo ca-certificates python python-pip python-devel fuse-overlayfs util-linux vim-minimal vim-enhanced helm kustomize libsecret openssh-server dotnet-hostfxr-8.0 dotnet-runtime-8.0 dotnet-sdk-8.0"
 ARG NODE_VERSION="v18.20.8"
 
 ENV HOME=${USER_HOME_DIR}

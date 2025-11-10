@@ -12,8 +12,8 @@
 
 schemaVersion: 2.3.0
 metadata:
-  name: che-code-sshd-clg
-  displayName: Visual Studio Code (desktop) (SSH) (Charro Work Around)
+  name: che-code-sshd-experimental
+  displayName: Visual Studio Code (desktop) (SSH) (Experimental Do Not Use Unless You Really Mean It)
   description: Visual Studio Code server for Eclipse Che over SSH
   tags:
     - ssh
@@ -79,9 +79,9 @@ metadata:
 components:
   - name: checode
     volume: {}
-  - name: che-code-sshd-clg
+  - name: che-code-sshd-experimental
     container:
-      image: quay.io/cgruver0/che/che-code-sshd:clg
+      image: quay.io/cgruver0/che/che-code-sshd:stable
       memoryLimit: 1024Mi
       memoryRequest: 256Mi
       cpuLimit: 500m
@@ -97,5 +97,5 @@ components:
           secure: true
           protocol: https
     attributes:
-      app.kubernetes.io/component: che-code-sshd-clg
+      app.kubernetes.io/component: che-code-sshd-experimental
       app.kubernetes.io/part-of: che-code-server.eclipse.org
