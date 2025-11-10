@@ -18,6 +18,7 @@ RUN set -e ; \
   dnf clean all ; \
   mkdir -p /usr/local/bin ; \
   mkdir -p ${WORK_DIR} ; \
+  mkdir -p ${HOME} ; \
   chmod +x /entrypoint.sh ; \
   #
   # Install NodeJS
