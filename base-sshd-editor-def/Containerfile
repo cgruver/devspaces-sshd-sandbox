@@ -1,14 +1,13 @@
 FROM registry.access.redhat.com/ubi9:9.6
 
 ARG USER_HOME_DIR="/home/user"
-ARG INSTALL_PACKAGES="openssl shadow-utils xz bash"
+ARG INSTALL_PACKAGES="openssl shadow-utils xz bash git"
 ARG NODE_VERSION="v18.20.8"
 
 ENV HOME=${USER_HOME_DIR}
 ENV PATH=${PATH}:/usr/local/node/bin
 
 COPY --chown=0:0 entrypoint.sh /
-COPY --chown=0:0 server.js /usr/local/www/
 
 RUN set -e ; \
   dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm ; \

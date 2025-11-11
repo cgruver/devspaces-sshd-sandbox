@@ -12,8 +12,8 @@
 
 schemaVersion: 2.3.0
 metadata:
-  name: che-code-sshd-experimental
-  displayName: Visual Studio Code (desktop) (SSH) (Experimental Do Not Use Unless You Really Mean It)
+  name: che-code-sshd-experimental-external-server
+  displayName: Visual Studio Code (desktop) (SSH) (Externalized Java Script) (Experimental Do Not Use Unless You Really Mean It)
   description: Visual Studio Code server for Eclipse Che over SSH
   tags:
     - ssh
@@ -81,11 +81,16 @@ components:
     volume: {}
   - name: che-code-sshd-experimental
     container:
-      image: quay.io/cgruver0/che/che-code-sshd:stable
+      image: quay.io/cgruver0/che/che-code-sshd:extjs
       memoryLimit: 1024Mi
       memoryRequest: 256Mi
       cpuLimit: 500m
       cpuRequest: 100m
+      env:
+      - name: GIT_URL
+        value: https://github.com/cgruver/devspaces-sshd-sandbox.git
+      - name: REVISION
+        value: externalize-js
       endpoints:
         - name: che-code-sshd
           attributes:

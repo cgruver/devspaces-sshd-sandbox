@@ -7,8 +7,8 @@ Using SSH to connect to workspace
 wget https://raw.githubusercontent.com/cgruver/devspaces-sshd-sandbox/refs/heads/main/base-sshd-editor-def/che-code-sshd-clg.yaml
 oc login <cluster uri>
 oc project <namespace where you deployed the CheCluster>
-oc create configmap che-code-sshd-experimental --from-file=che-code-sshd-clg.yaml
-oc label configmap che-code-sshd-experimental app.kubernetes.io/part-of=che.eclipse.org app.kubernetes.io/component=editor-definition
+oc create configmap che-code-sshd-experimental-extjs --from-file=che-code-sshd-clg.yaml
+oc label configmap che-code-sshd-experimental-extjs app.kubernetes.io/part-of=che.eclipse.org app.kubernetes.io/component=editor-definition
 ```
 
 1. Create an SSH key pair, and upload it to your Dev Spaces profile
