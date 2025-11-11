@@ -4,7 +4,7 @@ Using SSH to connect to workspace
 1. Import the editor definition
 
 ```bash
-wget https://raw.githubusercontent.com/cgruver/devspaces-sshd-sandbox/refs/heads/main/base-sshd-editor-def/che-code-sshd-clg.yaml
+wget https://raw.githubusercontent.com/cgruver/devspaces-sshd-sandbox/refs/heads/externalize-js/base-sshd-editor-def/che-code-sshd-clg.yaml
 oc login <cluster uri>
 oc project <namespace where you deployed the CheCluster>
 oc create configmap che-code-sshd-experimental-extjs --from-file=che-code-sshd-clg.yaml
