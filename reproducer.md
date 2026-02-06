@@ -173,11 +173,15 @@ systemd:
       [Unit]
       Description=Modify SeLinux Type container_engine_t
       DefaultDependencies=no
-      After=kubelet.service      [Service]
+      After=kubelet.service
+      
+      [Service]
       Type=oneshot
       RemainAfterExit=yes
       ExecStart=bash -c "/bin/checkmodule -M -m -o /tmp/selinux_patch_audit_log.mod /etc/selinux_patch_audit_log.te && /bin/semodule_package -o /tmp/selinux_patch_audit_log.pp -m /tmp/selinux_patch_audit_log.mod && /sbin/semodule -i /tmp/selinux_patch_audit_log.pp"
-      TimeoutSec=0      [Install]
+      TimeoutSec=0
+      
+      [Install]
       WantedBy=multi-user.target
     enabled: true
     name: systemd-selinux-patch-audit-log.service
