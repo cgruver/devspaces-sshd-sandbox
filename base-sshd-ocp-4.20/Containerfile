@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9:9.6
+FROM registry.access.redhat.com/ubi10:10.1
 
 ARG USER_HOME_DIR="/home/user"
 ARG WORK_DIR="/projects"
@@ -39,7 +39,7 @@ RUN set -e ; \
   #
   mkdir -p /usr/local/ssh ; \
   chmod 755 /usr/local/ssh ; \
-  ssh-keygen -q -N "" -t dsa -f /usr/local/ssh/ssh_host_dsa_key ; \
+  # ssh-keygen -q -N "" -t dsa -f /usr/local/ssh/ssh_host_dsa_key ; \
   ssh-keygen -q -N "" -t rsa -b 4096 -f /usr/local/ssh/ssh_host_rsa_key ; \
   ssh-keygen -q -N "" -t ecdsa -f /usr/local/ssh/ssh_host_ecdsa_key ; \
   ssh-keygen -q -N "" -t ed25519 -f /usr/local/ssh/ssh_host_ed25519_key ; \
