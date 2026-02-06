@@ -264,6 +264,6 @@ services:
       - "8080:8080"
     restart: on-failure
     environment:
-      API_BASE_URL: ${API_BASE_URL}
+      API_BASE_URL: ${API_BASE_URL:-http://localhost:8082}
       QUARKUS_HTTP_CORS: "true"
       QUARKUS_HTTP_CORS_ORIGINS: "/.*/"
